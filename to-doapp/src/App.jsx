@@ -11,7 +11,7 @@ function App() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
-  // ADD TASK
+  
   function addTask(text) {
     console.log("Adding task:", text);
     const trimmed = text.trim();
@@ -22,18 +22,18 @@ function App() {
     setInput("");
   }
 
-  // DELETE TASK
+  
   function deleteTask(id) {
     setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id));
   }
 
-  // START EDIT INLINE
+  
   function startEdit(task) {
     setEditingId(task.id);
     setEditingText(task.text);
   }
 
-  // SAVE EDIT INLINE
+  
   function saveEdit(id) {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
@@ -44,7 +44,7 @@ function App() {
     setEditingText("");
   }
 
-  // CANCEL EDIT
+
   function cancelEdit() {
     setEditingId(null);
     setEditingText("");
@@ -56,10 +56,8 @@ function App() {
         <h1 className="text-2xl md:text-3xl font-bold text-center mb-6">
           TO-DO LIST
         </h1>
-      
-      //Add Task
-      <List input={input} setInput={setInput} addTask={addTask} />
 
+        <List input={input} setInput={setInput} addTask={addTask} />
 
         <div className="flex flex-col gap-2 max-h-64 md:max-h-80 overflow-auto">
           {tasks.length === 0 ? (
