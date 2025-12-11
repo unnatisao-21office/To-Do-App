@@ -1,5 +1,5 @@
-import React from "react";
-function List({ input, setInput, addTask }) {
+function AddTask({ taskProps }) {
+  const { addTask, setInput, input } = taskProps;
   return (
     <div className="flex flex-col sm:flex-row gap-2 mb-6">
       <input
@@ -13,11 +13,11 @@ function List({ input, setInput, addTask }) {
         type="button"
         disabled={!input.trim()}
         placeholder="Add a new task"
-        className="w-full sm:w-auto px-4 sm:px-8 py-2 sm:py-3 bg-gray-900 hover:bg-gray-800 text-black rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full sm:w-auto px-4 sm:px-8 py-2 sm:py-3 bg-gray-700 hover:bg-gray-800 text-white font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Add
       </button>
     </div>
   );
-}
-export default List;
+} 
+export default AddTask;
