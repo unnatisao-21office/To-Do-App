@@ -37,6 +37,7 @@ function App() {
 
     setInput("");
     setDescription("");
+    setSelectedOption(null);
   }
   const filteredTasks = tasks.filter((task) =>
     {const matchesSearch = task.text.toLowerCase().includes(search.toLowerCase())
@@ -98,8 +99,8 @@ function App() {
             deleteTask,
             startEdit,
             editingDescription,
-            setEditingDescription,          
-          }}
+            setEditingDescription,
+           }}
         />
       </div>
     </div>

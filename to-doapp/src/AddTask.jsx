@@ -27,7 +27,7 @@ function AddTask({ taskProps }) {
        value={selectedOption}
        onChange={handleChange}
        options={Options}
-       placeholder="Select Category"
+       placeholder="No Category Selected"
         className="flex-1 border rounded-xl px-4 py-2 text-gray-700"
       />
        <textarea

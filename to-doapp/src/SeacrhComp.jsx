@@ -22,7 +22,7 @@ function SearchComp({ taskProps }) {
         onChange={(e) => setCategory(e.target.value)}
         className="border rounded-xl px-3 w-32 py-2 bg-gray-300 text-black"
       >
-        <option value="All">All</option>
+        <option value="All">Category</option>
         <option value="Work">Work</option>
         <option value="Personal">Personal</option>
         <option value="Shopping">Shopping</option>
