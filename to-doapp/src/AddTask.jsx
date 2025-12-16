@@ -1,6 +1,6 @@
 import Select from "react-select";
 import React from "react";
-import { OPTIONS } from "./constants";
+import { OPTIONS } from "./constants/index.js";
 function AddTask({ taskProps }) {
   const {
     addTask,
