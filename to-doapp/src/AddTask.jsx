@@ -1,20 +1,22 @@
-import Select from 'react-select';
+import Select from "react-select";
 import React from "react";
-
-
+import { OPTIONS } from "./constants/Index.js";
 function AddTask({ taskProps }) {
-  const { addTask, setInput, input, selectedOption,setSelectedOption, description, setDescription } = taskProps;
-  const Options = [
-    { value: 'Work', label: 'Work' },
-    { value: 'Personal', label: 'Personal' },
-    { value: 'Shopping', label: 'Shopping' },
-    { value: 'Workout', label: 'Workout' },
-  ];
-
-    const handleChange = (option)=>{
-        setSelectedOption (option);
-        console.log(`Option selected:`, option);
-    };
+  const {
+    addTask,
+    setInput,
+    input,
+    selectedOption,
+    setSelectedOption,
+    description,
+    setDescription,
+  } = taskProps;
+  
+ 
+  const handleChange = (option) => {
+    setSelectedOption(option);
+    console.log(`Option selected:`, option);
+  };
   return (
     <div className="flex flex-row sm:flex-col gap-2 mb-6">
       <input
@@ -23,14 +25,14 @@ function AddTask({ taskProps }) {
         placeholder="Add a new task"
         className="flex-1 border rounded-xl px-4 py-2 text-gray-700"
       />
-       <Select 
-       value={selectedOption}
-       onChange={handleChange}
-       options={Options}
-       placeholder="No Category Selected"
+      <Select
+        value={selectedOption}
+        onChange={handleChange}
+        options={OPTIONS}
+        placeholder="No Category Selected"
         className="flex-1 border rounded-xl px-4 py-2 text-gray-700"
       />
-       <textarea
+      <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Description"
@@ -47,5 +49,5 @@ function AddTask({ taskProps }) {
       </button>
     </div>
   );
-} 
+}
 export default AddTask;

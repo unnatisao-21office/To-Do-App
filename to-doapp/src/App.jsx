@@ -2,19 +2,20 @@ import { useState, useEffect } from "react";
 import AddTask from "./AddTask";
 import ListComponent from "./ListComponent";
 import SearchComp from "./SeacrhComp";
+import { OPTIONS } from "./constants/Index";
 function App() {
- const saved = localStorage.getItem("tasks");
+  const saved = localStorage.getItem("tasks");
 
   const [tasks, setTasks] = useState(JSON.parse(saved) || []);
   const [input, setInput] = useState("");
   const [search, setSearch] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState(null);
   const [description, setDescription] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
   const [editingDescription, setEditingDescription] = useState("");
-  const [editingCategory, setEditingCategory] = useState("");
+  const [editingCategory, setEditingCategory] = useState(null);
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
@@ -31,7 +32,9 @@ function App() {
         id: Date.now(),
         text: trimmed,
         description: description.trim(),
-        category: selectedOption ? selectedOption.value || selectedOption : null,
+        category: selectedOption
+          ? selectedOption.value || selectedOption
+          : null,
       },
     ]);
 
@@ -39,15 +42,21 @@ function App() {
     setDescription("");
     setSelectedOption(null);
   }
-  const filteredTasks = tasks.filter((task) =>
-    {const matchesSearch = task.text.toLowerCase().includes(search.toLowerCase())
-    const matchesCategory = (category === "All" || task.category === category)
+  const filteredTasks = tasks.filter((task) => {
+    const matchesSearch = task.text
+      .toLowerCase()
+      .includes(search.toLowerCase()) || task.description?.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory =
+      !category ||
+      category.value === "All" ||
+      task.category === category.value ||
+      task.category === category;
+   
 
     return matchesSearch && matchesCategory;
-    }
-  );
+  });
   function deleteTask(id) {
-    setTasks((prevTasks)   => prevTasks.filter((t) => t.id !== id));
+    setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id));
   }
 
   function startEdit(task) {
@@ -56,23 +65,32 @@ function App() {
     setEditingId(task.id);
     setEditingText(task.text);
     setEditingDescription(task.description || "");
-    setEditingCategory(task.category || "");
+      const selectedOption = OPTIONS.find(
+    (opt) => opt.value === task.category
+  );
+
+  setEditingCategory(selectedOption || null);
   }
 
+function saveEdit() {
+  setTasks(
+    tasks.map((task) =>
+      task.id === editingId
+        ? {
+            ...task,
+            text: editingText,
+            description: editingDescription,
+            category: editingCategory ? editingCategory.value : null,
+          }
+        : task
+    )
+  );
 
-
-  function saveEdit(id) {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, text: editingText ,
-           description: editingDescription.trim(),
-        } : task
-      )
-    );
-    setEditingId(null);
-    setEditingText("");
-    setEditingDescription("");
-  }
+  setEditingId(null);
+  setEditingText("");
+  setEditingDescription("");
+  setEditingCategory(null);
+}
 
   function cancelEdit() {
     setEditingId(null);
@@ -87,8 +105,18 @@ function App() {
           TO-DO LIST
         </h1>
 
-        <AddTask taskProps={{ addTask, setInput, input , description , setDescription ,selectedOption,setSelectedOption}} />
-        <SearchComp taskProps={{ search, setSearch,category, setCategory }} />
+        <AddTask
+          taskProps={{
+            addTask,
+            setInput,
+            input,
+            description,
+            setDescription,
+            selectedOption,
+            setSelectedOption,
+          }}
+        />
+        <SearchComp taskProps={{ search, setSearch, category, setCategory }} />
         <ListComponent
           taskProps={{
             tasks: filteredTasks,
@@ -101,9 +129,9 @@ function App() {
             startEdit,
             editingDescription,
             setEditingDescription,
-            editingCategory,
-            setEditingCategory
-           }}
+           editingCategory,
+           setEditingCategory
+          }}
         />
       </div>
     </div>

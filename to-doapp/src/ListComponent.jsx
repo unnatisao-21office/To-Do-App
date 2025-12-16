@@ -1,10 +1,7 @@
 import React from "react";
-import { Trash } from "lucide-react";
-import { Pencil } from "lucide-react";
-import { CircleCheckBig } from "lucide-react";
-import { Save } from "lucide-react";
-import { X } from "lucide-react";
-
+import { Trash, Pencil, CircleCheckBig, Save, X } from "lucide-react";
+import Select from "react-select";
+import { OPTIONS } from "./constants/Index.js";
 function ListComponent({ taskProps }) {
   const {
     tasks,
@@ -18,8 +15,7 @@ function ListComponent({ taskProps }) {
     editingDescription,
     setEditingDescription,
     editingCategory,
-    setEditingCategory
-    
+    setEditingCategory,
   } = taskProps;
 
   return (
@@ -30,7 +26,9 @@ function ListComponent({ taskProps }) {
         tasks.map((task) => (
           <div
             key={task.id}
-            className="flex items-center justify-between bg-gray-600 text-white p-3 md:p-5 rounded-xl"
+            className="flex items-center justify-between bg-gray-600 hover:bg-gray-700 transition-colors text-white p-3 md:p-5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
+        active:bg-gray-800
+        transition duration-150 ease-in-out"
           >
             {editingId === task.id ? (
               <div className="flex-1 mr-3">
@@ -40,11 +38,12 @@ function ListComponent({ taskProps }) {
                   placeholder="Edit task"
                   className="flex-1 mr-2 px-3 py-1 bg-white text-gray-700 rounded-sm"
                 />
-                <input
+                <Select
+                  options={OPTIONS}
                   value={editingCategory}
-                  onChange={(e) => setEditingCategory(e.target.value)}
-                  placeholder="Edit Category"
-                  className="flex-1 mr-2 px-3 py-1 bg-white text-gray-700 mt-2 rounded-sm"
+                  onChange={(option) => setEditingCategory(option)}
+                  placeholder="Edit category"
+                  className="flex-1 mr-2 px-3 py-1 bg-white text-gray-700 mt-2"
                 />
 
                 <textarea
@@ -53,24 +52,20 @@ function ListComponent({ taskProps }) {
                   placeholder="Edit Description"
                   className="flex-1 px-5 py-1 mr-4 bg-white text-gray-700 rounded-sm mt-2"
                 />
-
               </div>
             ) : (
               <div>
                 <div>
-                  
                   <p className="font-semibold text-white break-words">
                     {task.text}
                   </p>
 
-                 
                   {task.category && (
                     <p className="mt-1 text-sm text-gray-300 italic">
                       Category: {task.category}
                     </p>
                   )}
 
-                 
                   {task.description && (
                     <p className="mt-1 text-sm text-gray-200">
                       {task.description}
