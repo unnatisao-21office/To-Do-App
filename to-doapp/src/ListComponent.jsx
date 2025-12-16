@@ -1,7 +1,7 @@
 import React from "react";
 import { Trash, Pencil, CircleCheckBig, Save, X } from "lucide-react";
 import Select from "react-select";
-import { OPTIONS } from "./constants/Index.js";
+import { OPTIONS } from "./constants/index.js";
 function ListComponent({ taskProps }) {
   const {
     tasks,
@@ -36,14 +36,15 @@ function ListComponent({ taskProps }) {
                   value={editingText}
                   onChange={(e) => setEditingText(e.target.value)}
                   placeholder="Edit task"
-                  className="flex-1 mr-2 px-3 py-1 bg-white text-gray-700 rounded-sm"
+                  className="flex-1 mr-4 px-3 py-1 bg-white text-gray-700 rounded-sm"
                 />
                 <Select
                   options={OPTIONS}
                   value={editingCategory}
                   onChange={(option) => setEditingCategory(option)}
                   placeholder="Edit category"
-                  className="flex-1 mr-2 px-3 py-1 bg-white text-gray-700 mt-2"
+            
+                  className="flex-1 mr-14 py-1 bg-gray-200 text-gray-700  rounded-sm mt-2"
                 />
 
                 <textarea

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AddTask from "./AddTask";
 import ListComponent from "./ListComponent";
 import SearchComp from "./SeacrhComp";
-import { OPTIONS } from "./constants/Index";
+import { OPTIONS } from "./constants";
 function App() {
   const saved = localStorage.getItem("tasks");
 
@@ -16,6 +16,7 @@ function App() {
   const [editingText, setEditingText] = useState("");
   const [editingDescription, setEditingDescription] = useState("");
   const [editingCategory, setEditingCategory] = useState(null);
+  
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
