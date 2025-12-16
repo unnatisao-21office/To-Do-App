@@ -17,6 +17,8 @@ function ListComponent({ taskProps }) {
     startEdit,
     editingDescription,
     setEditingDescription,
+    editingCategory,
+    setEditingCategory
     
   } = taskProps;
 
@@ -38,13 +40,20 @@ function ListComponent({ taskProps }) {
                   placeholder="Edit task"
                   className="flex-1 mr-2 px-3 py-1 bg-white text-gray-700 rounded-sm"
                 />
+                <input
+                  value={editingCategory}
+                  onChange={(e) => setEditingCategory(e.target.value)}
+                  placeholder="Edit Category"
+                  className="flex-1 mr-2 px-3 py-1 bg-white text-gray-700 mt-2 rounded-sm"
+                />
 
                 <textarea
                   value={editingDescription}
                   onChange={(e) => setEditingDescription(e.target.value)}
                   placeholder="Edit Description"
-                  className="flex-1 px-3 py-1 mr-2 bg-white text-gray-700 rounded-sm mt-2"
+                  className="flex-1 px-5 py-1 mr-4 bg-white text-gray-700 rounded-sm mt-2"
                 />
+
               </div>
             ) : (
               <div>

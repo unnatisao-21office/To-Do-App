@@ -14,7 +14,7 @@ function App() {
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
   const [editingDescription, setEditingDescription] = useState("");
-
+  const [editingCategory, setEditingCategory] = useState("");
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
@@ -47,7 +47,7 @@ function App() {
     }
   );
   function deleteTask(id) {
-    setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id));
+    setTasks((prevTasks)   => prevTasks.filter((t) => t.id !== id));
   }
 
   function startEdit(task) {
@@ -56,6 +56,7 @@ function App() {
     setEditingId(task.id);
     setEditingText(task.text);
     setEditingDescription(task.description || "");
+    setEditingCategory(task.category || "");
   }
 
 
@@ -100,6 +101,8 @@ function App() {
             startEdit,
             editingDescription,
             setEditingDescription,
+            editingCategory,
+            setEditingCategory
            }}
         />
       </div>
