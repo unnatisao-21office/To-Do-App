@@ -1,27 +1,61 @@
 import { useState, useEffect } from "react";
 import AddTask from "./AddTask";
 import ListComponent from "./ListComponent";
+import SearchComp from "./SeacrhComp";
+import { OPTIONS } from "./constants";
 function App() {
   const saved = localStorage.getItem("tasks");
+
   const [tasks, setTasks] = useState(JSON.parse(saved) || []);
   const [input, setInput] = useState("");
+  const [search, setSearch] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [description, setDescription] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
-
+  const [editingDescription, setEditingDescription] = useState("");
+  const [editingCategory, setEditingCategory] = useState(null);
+  
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
   function addTask(text) {
     console.log("Adding task:", text);
+    console.log("Selected Option:", selectedOption);
     const trimmed = text.trim();
     if (!trimmed) return;
 
-    setTasks((prevTasks) => [...prevTasks, { id: Date.now(), text: trimmed }]);
+    setTasks((prevTasks) => [
+      ...prevTasks,
+      {
+        id: Date.now(),
+        text: trimmed,
+        description: description.trim(),
+        category: selectedOption
+          ? selectedOption.value || selectedOption
+          : null,
+      },
+    ]);
 
     setInput("");
+    setDescription("");
+    setSelectedOption(null);
   }
+  const filteredTasks = tasks.filter((task) => {
+    const matchesSearch = task.text
+      .toLowerCase()
+      .includes(search.toLowerCase()) || task.description?.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory =
+      !category ||
+      category.value === "All" ||
+      task.category === category.value ||
+      task.category === category;
+   
 
+    return matchesSearch && matchesCategory;
+  });
   function deleteTask(id) {
     setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id));
   }
@@ -31,21 +65,38 @@ function App() {
     if (!trimmed) return;
     setEditingId(task.id);
     setEditingText(task.text);
+    setEditingDescription(task.description || "");
+      const selectedOption = OPTIONS.find(
+    (opt) => opt.value === task.category
+  );
+
+  setEditingCategory(selectedOption || null);
   }
 
-  function saveEdit(id) {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, text: editingText } : task
-      )
-    );
-    setEditingId(null);
-    setEditingText("");
-  }
+function saveEdit() {
+  setTasks(
+    tasks.map((task) =>
+      task.id === editingId
+        ? {
+            ...task,
+            text: editingText,
+            description: editingDescription,
+            category: editingCategory ? editingCategory.value : null,
+          }
+        : task
+    )
+  );
+
+  setEditingId(null);
+  setEditingText("");
+  setEditingDescription("");
+  setEditingCategory(null);
+}
 
   function cancelEdit() {
     setEditingId(null);
     setEditingText("");
+    setEditingDescription("");
   }
 
   return (
@@ -55,10 +106,21 @@ function App() {
           TO-DO LIST
         </h1>
 
-        <AddTask taskProps={{ addTask, setInput, input }} />
+        <AddTask
+          taskProps={{
+            addTask,
+            setInput,
+            input,
+            description,
+            setDescription,
+            selectedOption,
+            setSelectedOption,
+          }}
+        />
+        <SearchComp taskProps={{ search, setSearch, category, setCategory }} />
         <ListComponent
           taskProps={{
-            tasks,
+            tasks: filteredTasks,
             editingId,
             editingText,
             setEditingText,
@@ -66,6 +128,10 @@ function App() {
             cancelEdit,
             deleteTask,
             startEdit,
+            editingDescription,
+            setEditingDescription,
+           editingCategory,
+           setEditingCategory
           }}
         />
       </div>
