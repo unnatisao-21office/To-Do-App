@@ -3,6 +3,8 @@ import AddTask from "./AddTask";
 import ListComponent from "./ListComponent";
 import SearchComp from "./SeacrhComp";
 import { OPTIONS } from "./constants";
+import ToggleState from "./ToggleState";
+
 function App() {
   const saved = localStorage.getItem("tasks");
 
@@ -16,7 +18,8 @@ function App() {
   const [editingText, setEditingText] = useState("");
   const [editingDescription, setEditingDescription] = useState("");
   const [editingCategory, setEditingCategory] = useState(null);
-  
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [deleteAllToggle, setDeleteAllToggle] = useState(false);
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
@@ -36,6 +39,7 @@ function App() {
         category: selectedOption
           ? selectedOption.value || selectedOption
           : null,
+        completed: false,
       },
     ]);
 
@@ -44,18 +48,38 @@ function App() {
     setSelectedOption(null);
   }
   const filteredTasks = tasks.filter((task) => {
-    const matchesSearch = task.text
-      .toLowerCase()
-      .includes(search.toLowerCase()) || task.description?.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch =
+      task.text.toLowerCase().includes(search.toLowerCase()) ||
+      task.description?.toLowerCase().includes(search.toLowerCase());
     const matchesCategory =
       !category ||
       category.value === "All" ||
       task.category === category.value ||
       task.category === category;
-   
-
-    return matchesSearch && matchesCategory;
+    const matchesStatus =
+      statusFilter === "All" ||
+      (statusFilter === "Active" && !task.completed) ||
+      (statusFilter === "Completed" && task.completed);
+    return matchesSearch && matchesCategory && matchesStatus;
   });
+
+  const completedTasks = tasks.filter((task) => task.completed).length;
+
+  function toggleComplete(id) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  }
+
+  function toggleDeleteAll() {
+    setDeleteAllToggle((prev) => {
+      if (!prev) setTasks([]);
+      return !prev;
+    });
+  }
+
   function deleteTask(id) {
     setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id));
   }
@@ -66,32 +90,30 @@ function App() {
     setEditingId(task.id);
     setEditingText(task.text);
     setEditingDescription(task.description || "");
-      const selectedOption = OPTIONS.find(
-    (opt) => opt.value === task.category
-  );
+    const selectedOption = OPTIONS.find((opt) => opt.value === task.category);
 
-  setEditingCategory(selectedOption || null);
+    setEditingCategory(selectedOption || null);
   }
 
-function saveEdit() {
-  setTasks(
-    tasks.map((task) =>
-      task.id === editingId
-        ? {
-            ...task,
-            text: editingText,
-            description: editingDescription,
-            category: editingCategory ? editingCategory.value : null,
-          }
-        : task
-    )
-  );
+  function saveEdit() {
+    setTasks(
+      tasks.map((task) =>
+        task.id === editingId
+          ? {
+              ...task,
+              text: editingText,
+              description: editingDescription,
+              category: editingCategory ? editingCategory.value : null,
+            }
+          : task
+      )
+    );
 
-  setEditingId(null);
-  setEditingText("");
-  setEditingDescription("");
-  setEditingCategory(null);
-}
+    setEditingId(null);
+    setEditingText("");
+    setEditingDescription("");
+    setEditingCategory(null);
+  }
 
   function cancelEdit() {
     setEditingId(null);
@@ -117,7 +139,17 @@ function saveEdit() {
             setSelectedOption,
           }}
         />
-        <SearchComp taskProps={{ search, setSearch, category, setCategory }} />
+        <SearchComp
+          taskProps={{
+            search,
+            setSearch,
+            category,
+            setCategory,
+            deleteAllToggle,
+            toggleDeleteAll,
+          }}
+        />
+        <ToggleState taskProps={{ statusFilter, setStatusFilter }} />
         <ListComponent
           taskProps={{
             tasks: filteredTasks,
@@ -130,8 +162,12 @@ function saveEdit() {
             startEdit,
             editingDescription,
             setEditingDescription,
-           editingCategory,
-           setEditingCategory
+            editingCategory,
+            setEditingCategory,
+            statusFilter,
+            setStatusFilter,
+            completedTasks,
+            toggleComplete,
           }}
         />
       </div>
