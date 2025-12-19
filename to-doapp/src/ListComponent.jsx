@@ -16,6 +16,7 @@ function ListComponent({ taskProps }) {
     setEditingDescription,
     editingCategory,
     setEditingCategory,
+    toggleComplete,
   } = taskProps;
 
   return (
@@ -23,7 +24,7 @@ function ListComponent({ taskProps }) {
       {tasks.length === 0 ? (
         <div className="border border-gray-300 "></div>
       ) : (
-        tasks.map((task) => (
+        tasks.map((task) => ( 
           <div
             key={task.id}
             className="flex items-center justify-between bg-gray-600 hover:bg-gray-700 transition-colors text-white p-3 md:p-5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
@@ -43,7 +44,6 @@ function ListComponent({ taskProps }) {
                   value={editingCategory}
                   onChange={(option) => setEditingCategory(option)}
                   placeholder="Edit category"
-            
                   className="flex-1 mr-14 py-1 bg-gray-200 text-gray-700  rounded-sm mt-2"
                 />
 
@@ -57,7 +57,9 @@ function ListComponent({ taskProps }) {
             ) : (
               <div>
                 <div>
-                  <p className="font-semibold text-white break-words">
+                  <p
+                   
+                  >
                     {task.text}
                   </p>
 
@@ -82,14 +84,14 @@ function ListComponent({ taskProps }) {
                   <button
                     disabled={!editingText.trim()}
                     onClick={() => saveEdit(task.id)}
-                    className="px-4 py-3 font-bold bg-black text-gray-400 rounded-lg text-sm disabled:cursor-not-allowed disabled:opacity-30"
+                    className="px-4 py-3 font-bold bg-black text-gray-400 rounded-lg text-sm disabled:cursor-not-allowed disabled:opacity-30 active:scale-95 transition-all"
                   >
                     <Save />
                   </button>
 
                   <button
                     onClick={cancelEdit}
-                    className="px-4 py-3 bg-black font-bold text-gray-400 rounded-lg text-sm"
+                    className="px-4 py-3 bg-black font-bold text-gray-400 rounded-lg text-sm active:scale-95 transition-all"
                   >
                     <X />
                   </button>
@@ -98,20 +100,32 @@ function ListComponent({ taskProps }) {
                 <>
                   <button
                     onClick={() => deleteTask(task.id)}
-                    className="px-3 py-3 bg-black font-semibold text-gray-400 rounded-lg"
+                    className="px-3 py-3 bg-black font-semibold text-gray-400 rounded-lg active:scale-95 transition-all"
                   >
                     <Trash />
                   </button>
-
+                   {!task.completed && (
                   <button
-                    onClick={() => startEdit(task)}
-                    className="px-3 py-3 bg-black font-semibold text-gray-400 rounded-lg "
+                    
+                    onClick={() => startEdit(task.id)}
+                    className="px-3 py-3 bg-black font-semibold text-gray-400 rounded-lg
+             disabled:opacity-40 disabled:trasition-all active:scale-95 transition-all"
                   >
                     <Pencil />
                   </button>
+                  )}
+
                   <button
-                    onClick={() => startEdit(task)}
-                    className="px-3 py-3 bg-black font-semibold text-gray-400 rounded-lg "
+                    onClick={() => toggleComplete(task.id)}
+                    className={`px-3 py-3 rounded-lg active:scale-95 transition-all
+                    ${
+                      task.completed
+                        ? "bg-green-600 text-white"
+                        : "bg-black text-gray-400"
+                    }`}
+                    title={
+                      task.completed ? "Mark as active" : "Mark as completed"
+                    }
                   >
                     <CircleCheckBig />
                   </button>

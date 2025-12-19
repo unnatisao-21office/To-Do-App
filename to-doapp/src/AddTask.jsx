@@ -43,7 +43,7 @@ function AddTask({ taskProps }) {
         onClick={() => addTask(input)}
         type="button"
         disabled={!input.trim()}
-        className="w-full sm:w-auto px-4 sm:px-8 py-2 sm:py-3 bg-gray-700 hover:bg-gray-800 text-white font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full sm:w-auto px-4 sm:px-8 py-2 sm:py-3 bg-gray-700 hover:bg-gray-800 text-white font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 transition-all"
       >
         Add
       </button>
