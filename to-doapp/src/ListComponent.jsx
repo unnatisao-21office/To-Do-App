@@ -24,7 +24,7 @@ function ListComponent({ taskProps }) {
       {tasks.length === 0 ? (
         <div className="border border-gray-300 "></div>
       ) : (
-        tasks.map((task) => (
+        tasks.map((task) => ( 
           <div
             key={task.id}
             className="flex items-center justify-between bg-gray-600 hover:bg-gray-700 transition-colors text-white p-3 md:p-5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
@@ -104,15 +104,16 @@ function ListComponent({ taskProps }) {
                   >
                     <Trash />
                   </button>
-
+                   {!task.completed && (
                   <button
-                    disabled={task.completed}
-                    onClick={() => startEdit(task)}
+                    
+                    onClick={() => startEdit(task.id)}
                     className="px-3 py-3 bg-black font-semibold text-gray-400 rounded-lg
-             disabled:opacity-40 disabled:cursor-not-allowed"
+             disabled:opacity-40 disabled:trasition-all active:scale-95 transition-all"
                   >
                     <Pencil />
                   </button>
+                  )}
 
                   <button
                     onClick={() => toggleComplete(task.id)}

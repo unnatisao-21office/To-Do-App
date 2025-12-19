@@ -36,7 +36,7 @@ function SearchComp({ taskProps }) {
         className="flex items-center justify-center gap-2 px-4 py-2 
                    bg-gray-500 text-white font-semibold rounded-lg
                    hover:bg-gray-600 active:scale-95 transition-all"
-      >
+         title="Delete All Tasks">
         <Trash size={20} />
         
       </button>

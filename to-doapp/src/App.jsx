@@ -20,6 +20,8 @@ function App() {
   const [editingCategory, setEditingCategory] = useState(null);
   const [statusFilter, setStatusFilter] = useState("All");
   const [deleteAllToggle, setDeleteAllToggle] = useState(false);
+
+  
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
@@ -73,12 +75,16 @@ function App() {
     );
   }
 
-  function toggleDeleteAll() {
-    setDeleteAllToggle((prev) => {
-      if (!prev) setTasks([]);
-      return !prev;
-    });
+const toggleDeleteAll = () => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete all tasks? This action cannot be undone."
+  );
+
+  if (confirmDelete) {
+    setTasks([]); 
   }
+};
+
 
   function deleteTask(id) {
     setTasks((prevTasks) => prevTasks.filter((t) => t.id !== id));
